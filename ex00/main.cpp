@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: naankour <naankour@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nazihaaankour <nazihaaankour@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 11:46:08 by naankour          #+#    #+#             */
-/*   Updated: 2025/12/17 15:51:43 by naankour         ###   ########.fr       */
+/*   Updated: 2025/12/23 00:47:00 by nazihaaanko      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,17 @@
 
 int main(int argc, char **argv)
 {
-	//store prices | date
 	if (argc != 2)
 	{
-		std::cout << "Error: number of args is invalid." << std::endl;
+		std::cout << "Error could not open file." << std::endl;
 		return (1);
 	}
 
-	
-	
+	BitcoinDB db;
+
+	if (!db.loadDatabase("data.csv"))
+		return 1;
+
+	if (!db.loadFile(argv[1]))
+		return 1;
 }
