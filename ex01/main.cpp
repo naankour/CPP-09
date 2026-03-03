@@ -6,24 +6,12 @@
 /*   By: naankour <naankour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/27 10:28:42 by naankour          #+#    #+#             */
-/*   Updated: 2026/02/27 11:42:14 by naankour         ###   ########.fr       */
+/*   Updated: 2026/03/03 14:11:05 by naankour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "RPN.hpp"
 
-//caracteres valides
-bool checkFormat(std:: string& token)
-{
-	for (size_t i = 0; i < token.size(); i++)
-	{
-		if (token[i] == ' ' || token[i] == '\t')
-			continue ;
-		if (!isdigit(token[i]) && token[i] != '+' && token[i] != '-' && token[i] != '*' && token[i] != '/')
-			return false;
-	}
-	return true;
-}
 
 int main(int argc, char **argv)
 {
