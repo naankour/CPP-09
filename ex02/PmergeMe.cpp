@@ -6,7 +6,7 @@
 /*   By: naankour <naankour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 14:07:41 by naankour          #+#    #+#             */
-/*   Updated: 2026/04/08 17:51:09 by naankour         ###   ########.fr       */
+/*   Updated: 2026/04/09 18:33:07 by naankour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,57 +84,89 @@ void PmergeMe::run()
 }
 
 
-
-
-
- 
-std::vector<Pair> mergeInsertSort(std::vector<Pair> list)
+std::vector<int> mergeInsertSort(std::vector<int> bigs )
 {
-	std::vector<Pair> bigPairs;
-	std::vector<Pair> smallPairs;
-	
-	Pair left;
+	std::vector<int> bigPairs;
+	std::vector<int> smallPairs;
+
+
+	int left = -1;
 	bool hasLeft = false;
+
+	if (bigs.size() <= 1)
+	return (bigs);
 	
-	if (list.size() <= 1)
-	return (list);
-	
-	if ((list.size() % 2) != 0)
+	if ((bigs.size() % 2) != 0)
 	{
-		left = list.back();
+		left = bigs.back();
+		bigs.pop_back();
 		hasLeft = true;
 	}
 
-	for (size_t i = 0; i + 1 < list.size(); i+=2)
+	for (size_t i = 0; i + 1 < bigs.size(); i+=2)
 	{
-		if (list[i].big > list[i + 1].big)
+		if (bigs[i] > bigs[i + 1])
 		{
-			bigPairs.push_back(list[i]);
-			smallPairs.push_back(list[i+1]);
+			bigPairs.push_back(bigs[i]);
+			smallPairs.push_back(bigs[i+1]);
 		}
 		else
 		{
-			bigPairs.push_back(list[i+1]);
-			smallPairs.push_back(list[i]);
+			bigPairs.push_back(bigs[i+1]);
+			smallPairs.push_back(bigs[i]);
 		}	
 	}
 	bigPairs = mergeInsertSort(bigPairs);
 	
-	// if (hasLeft)
-	// 	bigPairs.push_back(left);
-	
-	// std::cout << "BIGS SORTED: ";
-	// for (size_t i = 0; i < bigPairs.size(); i++)
-	// 	std::cout << " bigg: " << bigPairs[i].big;
-	// std::cout << std::endl;
-		
-	// std::vector<int> final;
-		
-	// final.push_back(smallPairs[0].small);
-	// for (size_t i = 0; i < bigPairs.size(); i++)
-	// 	final.push_back(bigPairs[i].big);
+	std::vector<int> sorted;
+	sorted.push_back(smallPairs[0]);
+	for(size_t i = 0; i < bigPairs.size(); i++)
+		sorted.push_back(bigPairs[i]);
 
-	return(list);
+	if (hasLeft)
+	{
+		std::vector<int>::iterator position = std::lower_bound(sorted.begin(), sorted.end(), left);
+		sorted.insert(position, left);
+	}
+	
+	std::cout << "SORTED: ";
+	for (size_t i = 0; i < sorted.size(); i++)
+		std::cout << sorted[i] << " ";
+	std::cout << std::endl;
+
+	return(sorted);
+}
+
+
+std::vector<size_t> buildJacob(size_t size)
+{
+    std::vector<size_t> order;
+    std::vector<size_t> jacob;
+
+    if (size == 0)
+        return (order);
+
+    jacob.push_back(1);
+    jacob.push_back(3);
+
+    while (jacob.back() < size)
+    {
+        size_t next = jacob[jacob.size() - 1] + 2 * jacob[jacob.size() - 2];
+        jacob.push_back(next);
+    }
+
+    size_t prev = 1;
+    for (size_t i = 1; i < jacob.size(); i++)
+    {
+        size_t curr = jacob[i];
+        for (size_t j = curr; j > prev; j--)
+        {
+            if (j <= size)
+                order.push_back(j);
+        }
+        prev = curr;
+    }
+    return (order);
 }
 
 void PmergeMe::algoVector()
@@ -186,9 +218,58 @@ void PmergeMe::algoVector()
 	for (size_t i = 0; i < smalls.size(); i++)
 		 std::cout << smalls[i] << " ";
 	std::cout << std::endl;
-	mergeInsertSort(list);
+
+	std::vector<int> finalChain;
+	finalChain = mergeInsertSort(bigs);
+	finalChain.insert(finalChain.begin(), smalls[0]);
+
+	std::cout << "SORTED with smallest: ";
+	for (size_t i = 0; i < finalChain.size(); i++)
+		std::cout << finalChain[i] << " ";
+	std::cout << std::endl;
+
+	std::vector<size_t> jacob = buildJacob(smalls.size());
+	std::cout << "JACOB: ";
+	for (size_t i = 0; i < jacob.size(); i++)
+		std::cout << jacob[i] << " ";
+	std::cout << std::endl;
 	
+	std::vector<bool> inserted(smalls.size(), false);
+
+	for(size_t i = 0; i < jacob.size(); i++)
+	{
+		size_t index = jacob[i] - 1;
+		if (index >= smalls.size())
+			continue;
+		std::vector<int>::iterator position = std::lower_bound(finalChain.begin(), finalChain.end(), smalls[index]);
+		finalChain.insert(position, smalls[index]);
+		inserted[index] = true;
+	}
+
+	for(size_t i = 0; i < smalls.size(); i++)
+	{
+		if (inserted[i] == true)
+			continue;
+
+		std::vector<int>::iterator position = std::lower_bound(finalChain.begin(), finalChain.end(), smalls[i]);
+		finalChain.insert(position, smalls[i]);
+	}
+
+	std::cout << "After: ";
+	for (size_t i = 0; i < finalChain.size(); i++)
+		std::cout << finalChain[i] << " ";
+	std::cout << std::endl;
+
+	if (left != -1)
+	{
+		std::vector<int>::iterator position = std::lower_bound(finalChain.begin(), finalChain.end(), left);
+		finalChain.insert(position, left);
+	}
 	
+	// finalChain.push_back(smallPairs[0].big);
+	// for (size_t i = 0; i < bigPairs.size(); i++)
+	// 	finalChain.push_back(bigPairs[i].big);
+
 }
 
 void PmergeMe::algoDeque()

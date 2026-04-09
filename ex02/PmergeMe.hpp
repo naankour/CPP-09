@@ -6,7 +6,7 @@
 /*   By: naankour <naankour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/02 13:21:45 by naankour          #+#    #+#             */
-/*   Updated: 2026/04/08 14:49:00 by naankour         ###   ########.fr       */
+/*   Updated: 2026/04/09 15:59:16 by naankour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <stdlib.h>
 #include <limits.h>
 #include <deque>
+#include <algorithm>
 
 struct Pair
 {
