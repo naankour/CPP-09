@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PmergeMe.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: naziha <naziha@student.42.fr>              +#+  +:+       +#+        */
+/*   By: naankour <naankour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 14:07:41 by naankour          #+#    #+#             */
-/*   Updated: 2026/04/12 23:40:28 by naziha           ###   ########.fr       */
+/*   Updated: 2026/04/13 17:18:29 by naankour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,247 +145,243 @@ std::vector<size_t> buildJacob(size_t size)
 }
 
 
-
+//methode avec les paires 
 // std::vector<int> mergeInsertSort(std::vector<int> arr)
 // {
-//     std::vector<int> bigPairs;
-//     std::vector<int> smallPairs;
-
-//     int straggler = -1;
-//     bool hasStraggler = false;
-
 //     if (arr.size() <= 1)
-//         return (arr);
-    
-//     // ✅ Gérer l'impair
-//     if ((arr.size() % 2) != 0)
+//         return arr;
+
+//     int odd = -1;
+//     bool hasOdd = false;
+
+//     if (arr.size() % 2 != 0)
 //     {
-//         straggler = arr.back();
+//         odd = arr.back();
 //         arr.pop_back();
-//         hasStraggler = true;
+//         hasOdd = true;
 //     }
 
-//     // ✅ ÉTAPE 1 : Former les paires 2 par 2
+//     // 1. création des paires
+//     std::vector<Pair> pairs;
 //     for (size_t i = 0; i + 1 < arr.size(); i += 2)
 //     {
+//         Pair p;
 //         if (arr[i] > arr[i + 1])
 //         {
-//             bigPairs.push_back(arr[i]);
-//             smallPairs.push_back(arr[i + 1]);
+//             p.big = arr[i];
+//             p.small = arr[i + 1];
 //         }
 //         else
 //         {
-//             bigPairs.push_back(arr[i + 1]);
-//             smallPairs.push_back(arr[i]);
-//         }	
+//             p.big = arr[i + 1];
+//             p.small = arr[i];
+//         }
+//         pairs.push_back(p);
 //     }
 
-//     std::cout << "Paires formées:" << std::endl;
-//     for (size_t i = 0; i < bigPairs.size(); i++)
+//     // 2. extraire bigs
+//     std::vector<int> bigs;
+//     for (size_t i = 0; i < pairs.size(); i++)
+//         bigs.push_back(pairs[i].big);
+
+//     // 3. tri récursif des bigs
+//     bigs = mergeInsertSort(bigs);
+
+//     // 4. réordonner les pairs selon bigs triés
+//     std::vector<Pair> sortedPairs;
+//     std::vector<bool> used(pairs.size(), false);
+//     for (size_t i = 0; i < bigs.size(); i++)
 //     {
-//         std::cout << "  big: " << bigPairs[i] << " small: " << smallPairs[i] << std::endl;
+//         for (size_t j = 0; j < pairs.size(); j++)
+//         {
+//             if (!used[j] && pairs[j].big == bigs[i])
+//             {
+//                 sortedPairs.push_back(pairs[j]);
+//                 used[j] = true;
+//                 break;
+//             }
+//         }
 //     }
-//     if (hasStraggler)
-//         std::cout << "  Straggler: " << straggler << std::endl;
-    
-//     // ✅ ÉTAPE 2 : RÉCURSION sur les bigs pour refaire des paires de paires
-//     bigPairs = mergeInsertSort(bigPairs);
-    
-//     // ✅ ÉTAPE 3 : Créer result avec les bigs triés
-//     std::vector<int> result = bigPairs;
 
-//     // ✅ ÉTAPE 4 : Insérer les smalls avec Jacobsthal
-//     std::vector<size_t> jacob = buildJacob(smallPairs.size());
+//     // 5. résultat initial = bigs triés
+//     std::vector<int> result = bigs;
+
+//     // 6. smalls dans l'ordre associé aux bigs triés
+//     std::vector<int> smalls;
+//     for (size_t i = 0; i < sortedPairs.size(); i++)
+//         smalls.push_back(sortedPairs[i].small);
+
+//     // 7. smalls[0] est forcément <= bigs[0], insertion gratuite en tête
+//     result.insert(result.begin(), smalls[0]);
+
+//     // 8. insertion des smalls restants avec Jacobsthal + borne optimisée
+//     std::vector<size_t> jacob = buildJacob(smalls.size());
 //     for (size_t i = 0; i < jacob.size(); i++)
 //     {
 //         size_t index = jacob[i];
-//         if (index < smallPairs.size())
+//         if (index == 0 || index >= smalls.size())
+//             continue;
+
+//         int value = smalls[index];
+//         int big = sortedPairs[index].big;
+
+//         std::vector<int>::iterator bigPos = std::find(result.begin(), result.end(), big);
+//         std::vector<int>::iterator pos = std::lower_bound(result.begin(), bigPos, value);
+//         result.insert(pos, value);
+//     }
+
+//     // 9. élément impair
+//     if (hasOdd)
+//     {
+//         std::vector<int>::iterator pos = std::lower_bound(result.begin(), result.end(), odd);
+//         result.insert(pos, odd);
+//     }
+// 	std::cout << "SORTED: ";
+// 	for (size_t i = 0; i < result.size(); i++)
+// 		std::cout << result[i] << " ";
+// 	std::cout << std::endl;
+//     return result;
+// }
+
+
+//en prenantn en compte l ordre des bigs lie au small
+// std::vector<int> mergeInsertSort(std::vector<int> arr)
+// {
+//     if (arr.size() <= 1)
+//         return (arr);
+
+//     int odd = -1;
+//     bool hasOdd = false;
+
+//     if ((arr.size() % 2) != 0)
+//     {
+//         odd = arr.back();
+//         arr.pop_back();
+//         hasOdd = true;
+//     }
+
+//     std::vector<int> bigs, smalls;
+//     for (size_t i = 0; i + 1 < arr.size(); i += 2)
+//     {
+//         if (arr[i] > arr[i + 1])
+//         { bigs.push_back(arr[i]); smalls.push_back(arr[i + 1]); }
+//         else
+//         { bigs.push_back(arr[i + 1]); smalls.push_back(arr[i]); }
+//     }
+
+//     std::vector<int> bigsBeforeSort = bigs;
+
+//     bigs = mergeInsertSort(bigs);
+
+//     std::vector<int> sortedSmalls;
+//     std::vector<bool> used(bigsBeforeSort.size(), false);
+//     for (size_t i = 0; i < bigs.size(); i++)
+//     {
+//         for (size_t j = 0; j < bigsBeforeSort.size(); j++)
 //         {
-//             std::vector<int>::iterator position = std::lower_bound(result.begin(), result.end(), smallPairs[index]);
-//             result.insert(position, smallPairs[index]);
+//             if (!used[j] && bigsBeforeSort[j] == bigs[i])
+//             {
+//                 sortedSmalls.push_back(smalls[j]);
+//                 used[j] = true;
+//                 break;
+//             }
 //         }
 //     }
-    
-//     // ✅ ÉTAPE 6 : Insérer le straggler
-//     if (hasStraggler)
+
+//     std::vector<int> result = bigs;
+//     result.insert(result.begin(), sortedSmalls[0]);
+
+//     std::vector<size_t> jacob = buildJacob(sortedSmalls.size());
+//     for (size_t i = 0; i < jacob.size(); i++)
 //     {
-//         std::vector<int>::iterator position = std::lower_bound(result.begin(), result.end(), straggler);
-//         result.insert(position, straggler);
+//         size_t index = jacob[i];
+//         if (index == 0 || index >= sortedSmalls.size())
+//             continue;
+
+//         std::vector<int>::iterator bound = std::upper_bound(result.begin(), result.end(), bigs[index]);
+//         std::vector<int>::iterator pos = std::lower_bound(result.begin(), bound, sortedSmalls[index]);
+//         result.insert(pos, sortedSmalls[index]);
 //     }
 
-//     return (result);
+//     if (hasOdd)
+//     {
+//         std::vector<int>::iterator pos = std::lower_bound(result.begin(), result.end(), odd);
+//         result.insert(pos, odd);
+//     }
+// 	std::cout << "SORTED: ";
+// 	for (size_t i = 0; i < result.size(); i++)
+// 		std::cout << result[i] << " ";
+// 	std::cout << std::endl;
+//     return result;
 // }
-
-
-// void PmergeMe::algoVector()
+// std::vector<int> mergeInsertSort(std::vector<int> arr )
 // {
-//     std::cout << "Before: ";
-//     for (size_t i = 0; i < this->vector.size(); i++)
-//         std::cout << this->vector[i] << " ";
-//     std::cout << std::endl;
+// 	if (arr.size() <= 1)
+// 		return (arr);
 
-//     // ✅ APPEL UNIQUE avec TOUTE la liste
-//     this->vector = mergeInsertSort(this->vector);
+// 	int odd = -1;
+// 	bool hasOdd = false;
 
-//     std::cout << "After: ";
-//     for (size_t i = 0; i < this->vector.size(); i++)
-//         std::cout << this->vector[i] << " ";
-//     std::cout << std::endl;
+// 	if ((arr.size() % 2) != 0)
+// 	{
+// 		odd = arr.back();
+// 		arr.pop_back();
+// 		hasOdd = true;
+// 	}
+
+// 	std::vector<int> bigs;
+// 	std::vector<int> smalls;
+
+// 	for (size_t i = 0; i + 1 < arr.size(); i += 2)
+// 	{
+// 		if (arr[i] > arr[i + 1])
+// 		{
+// 			bigs.push_back(arr[i]);
+// 			smalls.push_back(arr[i + 1]);
+// 		}
+// 		else
+// 		{
+// 			bigs.push_back(arr[i + 1]);
+// 			smalls.push_back(arr[i]);
+// 		}	
+// 	}
+
+// 	std::vector<int> bigsOrderBeforeSort = bigs;
+// 	// std::vector<int> smallsReorder(bigs.size());
+// // small ≤ big associé
+// 	bigs = mergeInsertSort(bigs);
+	
+// 	std::vector<int> result = bigs;
+
+// 	std::vector<size_t> jacob = buildJacob(smalls.size());
+// 	for (size_t i = 0; i < jacob.size(); i++)
+//     {
+//         size_t index = jacob[i];
+//         if (index < smalls.size())
+//         {
+//             std::vector<int>::iterator position = std::lower_bound(result.begin(), result.end(), smalls[index]);
+//             result.insert(position, smalls[index]);
+//         }
+// 	}
+
+// 	if (hasOdd)
+// 	{
+// 		std::vector<int>::iterator position = std::lower_bound(result.begin(), result.end(), odd);
+// 		result.insert(position, odd);
+// 	}
+	
+// 	std::cout << "SORTED: ";
+// 	for (size_t i = 0; i < result.size(); i++)
+// 		std::cout << result[i] << " ";
+// 	std::cout << std::endl;
+
+// 	return(result);
 // }
-std::vector<int> mergeInsertSort(std::vector<int> arr )
-{
-	std::vector<int> bigPairs;
-	std::vector<int> smallPairs;
-
-	int left = -1;
-	bool hasLeft = false;
-
-	if (arr.size() <= 1)
-		return (arr);
-	
-	if ((arr.size() % 2) != 0)
-	{
-		left = arr.back();
-		arr.pop_back();
-		hasLeft = true;
-	}
-
-	for (size_t i = 0; i + 1 < arr.size(); i+=2)
-	{
-		if (arr[i] > arr[i + 1])
-		{
-			bigPairs.push_back(arr[i]);
-			smallPairs.push_back(arr[i+1]);
-		}
-		else
-		{
-			bigPairs.push_back(arr[i+1]);
-			smallPairs.push_back(arr[i]);
-		}	
-	}
-	
-	bigPairs = mergeInsertSort(bigPairs);
-	
-	std::vector<int> result = bigPairs;
-
-	std::vector<size_t> jacob = buildJacob(smallPairs.size());
-	for (size_t i = 0; i < jacob.size(); i++)
-    {
-        size_t index = jacob[i];
-        if (index < smallPairs.size())
-        {
-            std::vector<int>::iterator position = std::lower_bound(result.begin(), result.end(), smallPairs[index]);
-            result.insert(position, smallPairs[index]);
-        }
-    }
-
-	for (int i = bigPairs.size() - 1; i >= 1; i--)
-    {
-        std::vector<int>::iterator position = std::lower_bound(result.begin(), result.end(), bigPairs[i]);
-        result.insert(position, bigPairs[i]);
-    }
-	
-	if (hasLeft)
-	{
-		std::vector<int>::iterator position = std::lower_bound(result.begin(), result.end(), left);
-		result.insert(position, left);
-	}
-	
-	std::cout << "SORTED: ";
-	for (size_t i = 0; i < result.size(); i++)
-		std::cout << result[i] << " ";
-	std::cout << std::endl;
-
-	return(result);
-}
-
-
 
 
 void PmergeMe::algoVector()
 {
-	std::vector<Pair> list;
-
-	int left = -1;
-	if ((this->vector.size() % 2) != 0)
-		left = this->vector.back();
-
-	for (size_t i = 0; i + 1 < this->vector.size(); i+=2)
-	{
-		Pair pair;
-		if (vector[i] >= vector[i + 1])
-		{
-			pair.big = vector[i];
-			pair.small = vector[i + 1];
-		}
-		else if (vector[i] < vector[i + 1])
-		{
-			pair.big = vector[i + 1];
-			pair.small = vector[i];
-		}
-		list.push_back(pair);
-	}
-
-	for (size_t i = 0; i < list.size(); i++)
-	{
-		std::cout << "big: " << list[i].big;
-		std::cout << " small: " << list[i].small << std::endl;
-	}
-	std::cout << "Reste: " << left << std::endl;
-
-	std::vector<int> bigs;
-	std::vector<int> smalls;
-	// std::vector<int> reste;
-
-	for (size_t i = 0; i < list.size(); i++)
-		bigs.push_back(list[i].big);
-	for (size_t i = 0; i < list.size(); i++)
-		smalls.push_back(list[i].small);
-
-	std::cout << "Bigs : ";
-	for (size_t i = 0; i < bigs.size(); i++)
-		 std::cout << bigs[i] << " ";
-	std::cout << std::endl;
-
-	std::cout << "Smalls : ";
-	for (size_t i = 0; i < smalls.size(); i++)
-		 std::cout << smalls[i] << " ";
-	std::cout << std::endl;
-
-	std::vector<int> finalChain;
-	finalChain = mergeInsertSort(bigs);
-
-	std::vector<size_t> jacobOrder = buildJacob(smalls.size());
-	std::cout << "JACOB: ";
-	for (size_t i = 0; i < jacobOrder.size(); i++)
-		std::cout << jacobOrder[i] << " ";
-	std::cout << std::endl;
-
-	for(size_t i = 0; i < jacobOrder.size(); i++)
-	{
-		size_t index = jacobOrder[i];
-		if (index < smalls.size())
-		{
-			std::vector<int>::iterator position = std::lower_bound(finalChain.begin(), finalChain.end(), smalls[index]);
-			finalChain.insert(position, smalls[index]);
-		}
-		
-	}
-
-	if (left != -1)
-	{
-		std::vector<int>::iterator position = std::lower_bound(finalChain.begin(), finalChain.end(), left);
-		finalChain.insert(position, left);
-	}
-	
-	std::cout << "After: ";
-	for (size_t i = 0; i < finalChain.size(); i++)
-		std::cout << finalChain[i] << " ";
-	std::cout << std::endl;
-
-	// finalChain.push_back(smallPairs[0].big);
-	// for (size_t i = 0; i < bigPairs.size(); i++)
-	// 	finalChain.push_back(bigPairs[i].big);
+	this->vector = mergeInsertSort(this->vector);
 
 }
 
