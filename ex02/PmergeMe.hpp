@@ -6,7 +6,7 @@
 /*   By: naankour <naankour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/02 13:21:45 by naankour          #+#    #+#             */
-/*   Updated: 2026/04/09 15:59:16 by naankour         ###   ########.fr       */
+/*   Updated: 2026/04/14 15:52:42 by naankour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <limits.h>
 #include <deque>
 #include <algorithm>
+#include <sys/time.h>
 
 struct Pair
 {
@@ -34,8 +35,7 @@ class PmergeMe
 		std::vector<int> vector;
 		std::deque<int> deque;
 
-		void algoVector();
-		void algoDeque();
+
 	
 	public:
 		PmergeMe();
@@ -44,5 +44,9 @@ class PmergeMe
 		PmergeMe& operator=(const PmergeMe& other);
 
 		void parse(int ac, char **av);
-		void run();
+		void algoVector();
+		size_t getVectorSize() const;
+		void algoDeque();
+		size_t getDequeSize() const;
+
 };
