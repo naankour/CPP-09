@@ -6,7 +6,7 @@
 /*   By: naankour <naankour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 14:07:41 by naankour          #+#    #+#             */
-/*   Updated: 2026/04/14 15:56:00 by naankour         ###   ########.fr       */
+/*   Updated: 2026/04/18 16:27:36 by naankour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,14 +88,11 @@ void PmergeMe::parse(int ac, char **av)
 	}
 }
 
-
-
-
 std::vector<size_t> buildJacobVector(size_t size)
 {
 	std::vector<size_t> order;
 	
-    if (size == 0)
+	if (size == 0)
 		return (order);
 	
 	if (size == 1)
@@ -105,23 +102,23 @@ std::vector<size_t> buildJacobVector(size_t size)
 	}
 	
 	std::vector<size_t> jacob;
-    jacob.push_back(0);
-    jacob.push_back(1);
+	jacob.push_back(0);
+	jacob.push_back(1);
 
-    while (jacob.back() < size)
-    {
-        size_t next = jacob[jacob.size() - 1] + 2 * jacob[jacob.size() - 2];
-        jacob.push_back(next);
-    }
+	while (jacob.back() < size)
+	{
+		size_t next = jacob[jacob.size() - 1] + 2 * jacob[jacob.size() - 2];
+		jacob.push_back(next);
+	}
 
 	std::vector<bool> used(size, false);
-    for (size_t i = 1; i < jacob.size(); i++)
-    {
-        size_t start = jacob[i - 1] + 1;
+	for (size_t i = 1; i < jacob.size(); i++)
+	{
+		size_t start = jacob[i - 1] + 1;
 		size_t end;
 
-        if (jacob[i] < size)
-            end = jacob[i];
+		if (jacob[i] < size)
+			end = jacob[i];
 		else
 			end = size - 1;
 	
@@ -140,7 +137,7 @@ std::vector<size_t> buildJacobVector(size_t size)
 		if (used[i] == false)
 			order.push_back(i);
 	}
-    return (order);
+	return (order);
 }
 
 std::vector<int> mergeInsertSortVector(std::vector<int> arr)
@@ -174,9 +171,6 @@ std::vector<int> mergeInsertSortVector(std::vector<int> arr)
 		}
 		pairs.push_back(p);
 	}
-	// std::cout << "PAIRS: " << std::endl;
-	// for (size_t i = 0; i < pairs.size(); i++)
-	// 	std::cout << "small: " << pairs[i].small << "  big: " << pairs[i].big << std::endl;
 	
 	std::vector<int> bigs;
 	for (size_t i = 0; i < pairs.size(); i++)
@@ -184,12 +178,7 @@ std::vector<int> mergeInsertSortVector(std::vector<int> arr)
 
 	bigs = mergeInsertSortVector(bigs);
 
-	// std::cout << "BIGS after recursivite ";
-	// 	for (size_t i = 0; i < bigs.size(); i++)
-	// 		std::cout << bigs[i] << " ";
-	// std::cout << std::endl;
-
-    //réordonner pairs selon bigs triés
+	//réordonner pairs selon bigs triés
 	std::vector<Pair> sortedPairs;
 	std::vector<bool> used(pairs.size(), false);
 	for (size_t i = 0; i < bigs.size(); i++)
@@ -207,15 +196,15 @@ std::vector<int> mergeInsertSortVector(std::vector<int> arr)
 
 	std::vector<int> result = bigs;
 
-    //smalls dans l'ordre associé aux bigs triés
+	//smalls dans l'ordre associé aux bigs triés
 	std::vector<int> smalls;
 	for (size_t i = 0; i < sortedPairs.size(); i++)
 		smalls.push_back(sortedPairs[i].small);
 
-    //smalls[0 <= bigs[0]
+	//smalls[0 <= bigs[0]
 	result.insert(result.begin(), smalls[0]);
 
-    //inserer smalls avec jacob et borne du big associe
+	//inserer smalls avec jacob et borne du big associe
 	std::vector<size_t> jacob = buildJacobVector(smalls.size());
 	for (size_t i = 0; i < jacob.size(); i++)
 	{
@@ -255,11 +244,6 @@ void PmergeMe::algoVector()
 
 }
 
-
-
-
-
-
 std::deque<size_t> buildJacobDeque(size_t size)
 {
 	std::deque<size_t> order;
@@ -274,23 +258,23 @@ std::deque<size_t> buildJacobDeque(size_t size)
 	}
 	
 	std::deque<size_t> jacob;
-    jacob.push_back(0);
-    jacob.push_back(1);
+	jacob.push_back(0);
+	jacob.push_back(1);
 
-    while (jacob.back() < size)
-    {
-        size_t next = jacob[jacob.size() - 1] + 2 * jacob[jacob.size() - 2];
-        jacob.push_back(next);
-    }
+	while (jacob.back() < size)
+	{
+		size_t next = jacob[jacob.size() - 1] + 2 * jacob[jacob.size() - 2];
+		jacob.push_back(next);
+	}
 	std::deque<bool> used(size, false);
 
-    for (size_t i = 1; i < jacob.size(); i++)
-    {
-        size_t start = jacob[i - 1] + 1;
+	for (size_t i = 1; i < jacob.size(); i++)
+	{
+		size_t start = jacob[i - 1] + 1;
 		size_t end;
 
-        if (jacob[i] < size)
-            end = jacob[i];
+		if (jacob[i] < size)
+			end = jacob[i];
 		else
 			end = size - 1;
 	
@@ -309,7 +293,7 @@ std::deque<size_t> buildJacobDeque(size_t size)
 		if (used[i] == false)
 			order.push_back(i);
 	}
-    return (order);
+	return (order);
 }
 
 
@@ -399,17 +383,5 @@ std::deque<int> mergeInsertSortDeque(std::deque<int> arr)
 
 void PmergeMe::algoDeque()
 {
-	std::cout << "BeforeDeque:   ";
-	for (size_t i = 0; i < this->deque.size(); i++)
-		std::cout << this->deque[i] << " ";
-	std::cout << std::endl;
-
-	this->deque = mergeInsertSortDeque(this->deque);
-
-	std::cout << "AfterDeque:    ";
-	for (size_t i = 0; i < this->deque.size(); i++)
-		std::cout << this->deque[i] << " ";
-	std::cout << std::endl;
-
-	
+	this->deque = mergeInsertSortDeque(this->deque);	
 }

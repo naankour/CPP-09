@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   BitcoinExchange.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nazihaaankour <nazihaaankour@student.42    +#+  +:+       +#+        */
+/*   By: naankour <naankour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 11:46:02 by naankour          #+#    #+#             */
-/*   Updated: 2025/12/23 00:58:18 by nazihaaanko      ###   ########.fr       */
+/*   Updated: 2026/04/18 15:28:43 by naankour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ bool BitcoinDB::parseLine(const std::string& line, std::string& date, double& va
 	{
 		date = line;
 		std::cerr << "Error: bad input => " << date << std::endl;
-		return false;
+		return (false);
 	}
 
 	date = line.substr(0, pipePos);
@@ -68,10 +68,16 @@ bool BitcoinDB::parseLine(const std::string& line, std::string& date, double& va
 	if (!isValidDate(date))
 	{
 		std::cerr << "Error: bad input => " << date << std::endl;
-		return false;
+		return (false);
 	}
 
-	value = std::strtod(valueStr.c_str(), NULL);
+	char *end;
+	value = std::strtod(valueStr.c_str(), &end);
+	if (end == valueStr.c_str() || *end != '\0')
+	{
+		std::cerr << "Error: bad input => " << valueStr << std::endl;
+		return (false);
+	}
 	if (value < 0)
 	{
 		std::cerr << "Error: not a positive number." << std::endl;
@@ -195,7 +201,13 @@ bool BitcoinDB::loadDatabase(const std::string& filename)
 			continue;
 		}
 
-		float rate = std::strtod(rateStr.c_str(), NULL);
+		char *end;
+		float rate = std::strtod(rateStr.c_str(), &end);
+		if (end == rateStr.c_str() || *end != '\0')
+		{
+			std::cerr << "Error: bad input => " << rateStr << std::endl;
+			return (false);
+		}
 		map[date] = rate;
 	}
 

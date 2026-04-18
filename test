@@ -1,0 +1,46 @@
+
+utiliser 2 containers ayant les memes methodes std::vector et std::deque
+
+paires, trier les paires okkk
+
+3 piles grands petits reste okkkk
+
+trier les grands :appeler recursivement a ce niveqau les frands sont tries 
+
+mettre les petits et le reste dans les grands sans jacobstal
+comparer avec recursivite 
+si ok -> jacobstal
+FINISH 
+
+2 5 6 3 1 2 8
+
+2-5    6-3   1-2    8
+
+5-2    6-3     2-1    8
+
+bigs 5 6 2
+smalls 2 3 1
+reste 8
+
+
+ex00 choix de map car 
+	-associer une cle a une valeur (lier la date au taux d echange)
+	-cles sont triees automatiquement
+	-trouver le taux le plus proche avec lower bound
+	-cles uniques
+
+ex01 choix de stack car
+	-dans l algo RPN on doit empiler des operandes, et depile quand on a un operateurpuis em rempile le resultat
+	-ce sont les methodes quon retoruve ans stack: push, top, pop, size
+	-compotement LIFO Last IN First Out 
+
+ex02 choix de vector et deque car 
+	-containors assez similaires dans les methodes proposees
+	-vector Stockage en mémoire contiguë, Accès aux éléments très rapide, insert au milieu est coûteux
+	-deque Stockage en blocs de mémoire séparés insert au début est plus rapide qu'un vector
+	-Le vector sera généralement plus rapide car l'algorithme fait beaucoup d'accès indexés et lower_bound, et la mémoire contiguë favorise le cache CPU
+Le deque sera légèrement plus lent à cause de la fragmentation mémoire
+
+Le vector stocke ses éléments en mémoire contiguë, 
+ce qui le rend plus cache-friendly. Le deque utilise des blocs séparés, 
+ce qui génère plus de cache miss et le rend légèrement plus lent

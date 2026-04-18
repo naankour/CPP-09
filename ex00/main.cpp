@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nazihaaankour <nazihaaankour@student.42    +#+  +:+       +#+        */
+/*   By: naankour <naankour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 11:46:08 by naankour          #+#    #+#             */
-/*   Updated: 2025/12/23 00:47:00 by nazihaaanko      ###   ########.fr       */
+/*   Updated: 2026/04/18 15:16:54 by naankour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int main(int argc, char **argv)
 {
 	if (argc != 2)
 	{
-		std::cout << "Error could not open file." << std::endl;
+		std::cerr << "Error: wrong number of arguments. Usage: ./btc <input_file>" << std::endl;
 		return (1);
 	}
 
@@ -27,4 +27,5 @@ int main(int argc, char **argv)
 
 	if (!db.loadFile(argv[1]))
 		return 1;
+	return (0);
 }
