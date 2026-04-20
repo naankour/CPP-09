@@ -6,7 +6,7 @@
 /*   By: naankour <naankour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/02 13:21:45 by naankour          #+#    #+#             */
-/*   Updated: 2026/04/18 15:54:00 by naankour         ###   ########.fr       */
+/*   Updated: 2026/04/20 18:04:32 by naankour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,11 @@ class PmergeMe
 		PmergeMe& operator=(const PmergeMe& other);
 
 		void parse(int ac, char **av);
-		void algoVector();
+		
 		size_t getVectorSize() const;
-		void algoDeque();
 		size_t getDequeSize() const;
+		
+		void algoVector();
+		void algoDeque();
 
 };

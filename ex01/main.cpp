@@ -6,7 +6,7 @@
 /*   By: naankour <naankour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/27 10:28:42 by naankour          #+#    #+#             */
-/*   Updated: 2026/03/04 15:11:54 by naankour         ###   ########.fr       */
+/*   Updated: 2026/04/20 16:40:25 by naankour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,11 @@ int main(int argc, char **argv)
 	
 	std::string token = argv[1];
 	RPN	expression;
-
-	// std::cout << token << std::endl;
+	
 	try
 	{
-		{
-			int result = expression.RPNalgo(token);
-			std::cout << result << std::endl;
-		}
+		int result = expression.RPNalgo(token);
+		std::cout << result << std::endl;
 	}
 	catch(const std::exception& e)
 	{

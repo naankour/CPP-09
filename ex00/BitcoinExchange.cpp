@@ -6,7 +6,7 @@
 /*   By: naankour <naankour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 11:46:02 by naankour          #+#    #+#             */
-/*   Updated: 2026/04/18 15:28:43 by naankour         ###   ########.fr       */
+/*   Updated: 2026/04/20 16:39:25 by naankour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,20 +31,20 @@ BitcoinDB& BitcoinDB::operator=(const BitcoinDB& other)
 bool BitcoinDB::isValidDate(const std::string& date)
 {
 	if (date.size() != 10 || date[4] != '-' || date[7] != '-')
-		return false;
+		return (false);
 	
 	int year = std::atoi(date.substr(0, 4).c_str());
 	int month = std::atoi(date.substr(5, 2).c_str());
 	int day = std::atoi(date.substr(8, 2).c_str());
 
 	if (year <= 0)
-		return false;
+		return (false);
 	if (month < 1 || month > 12)
-		return false;
+		return (false);
 	int daysInMonth[12] = {31,28,31,30,31,30,31,31,30,31,30,31};
 	if (day < 1 || day > daysInMonth[month - 1])
-		return false;
-	return true;
+		return (false);
+	return (true);
 }
 
 bool BitcoinDB::parseLine(const std::string& line, std::string& date, double& value)
@@ -97,7 +97,7 @@ bool BitcoinDB::loadFile(const std::string& filename)
 	if (!file)
 	{
 		std::cerr << "Error: could not open input file. " << filename << std::endl;
-		return false;
+		return (false);
 	}
 
 	std::string line;
@@ -105,7 +105,7 @@ bool BitcoinDB::loadFile(const std::string& filename)
 	{
 		std::cerr << "Error: empty file." << std::endl;
 		file.close();
-		return false;
+		return (false);
 	}
 
 	line.erase(0, line.find_first_not_of(" \t"));
@@ -115,7 +115,7 @@ bool BitcoinDB::loadFile(const std::string& filename)
 	{
 		std::cerr << "Error: first line must be 'date | value'" << std::endl;
 		file.close();
-		return false;
+		return (false);
 	}
 
 	while (std::getline(file, line))
@@ -147,7 +147,7 @@ bool BitcoinDB::loadFile(const std::string& filename)
 	}
 
 	file.close();
-	return true;
+	return (true);
 }
 
 bool BitcoinDB::loadDatabase(const std::string& filename)
@@ -156,23 +156,23 @@ bool BitcoinDB::loadDatabase(const std::string& filename)
 	if (!file)
 	{
 		std::cerr << "Error: could not open database file: " << filename << std::endl;
-		return false;
+		return (false);
 	}
 
 	std::string line;
  	if (!std::getline(file, line))
 	{
 		std::cerr << "Error: empty database file." << std::endl;
-		return false;
+		return (false);
 	}
 
 	line.erase(0, line.find_first_not_of(" \t"));
-	line.erase(line.find_last_not_of(" \t") + 1);
+	line.erase(line.find_last_not_of(" \t") + 1);  
 
 	if (line != "date,exchange_rate")
 	{
 		std::cerr << "Error: first line must be 'date,exchange_rate'" << std::endl;
-		return false;
+		return (false);
 	}
 
 	while (std::getline(file, line))
@@ -202,11 +202,11 @@ bool BitcoinDB::loadDatabase(const std::string& filename)
 		}
 
 		char *end;
-		float rate = std::strtod(rateStr.c_str(), &end);
+		double rate = std::strtod(rateStr.c_str(), &end);
 		if (end == rateStr.c_str() || *end != '\0')
 		{
 			std::cerr << "Error: bad input => " << rateStr << std::endl;
-			return (false);
+			continue;
 		}
 		map[date] = rate;
 	}

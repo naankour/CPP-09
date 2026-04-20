@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   BitcoinExchange.hpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nazihaaankour <nazihaaankour@student.42    +#+  +:+       +#+        */
+/*   By: naankour <naankour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/17 11:46:05 by naankour          #+#    #+#             */
-/*   Updated: 2025/12/23 00:36:29 by nazihaaanko      ###   ########.fr       */
+/*   Updated: 2026/04/20 16:39:35 by naankour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ class BitcoinDB
 {
 	private:
 		std::map<std::string, float> map;
+
 	public:
 		BitcoinDB();
 		~BitcoinDB();

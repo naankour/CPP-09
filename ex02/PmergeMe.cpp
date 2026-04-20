@@ -6,7 +6,7 @@
 /*   By: naankour <naankour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 14:07:41 by naankour          #+#    #+#             */
-/*   Updated: 2026/04/18 16:27:36 by naankour         ###   ########.fr       */
+/*   Updated: 2026/04/20 18:12:46 by naankour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,7 +178,6 @@ std::vector<int> mergeInsertSortVector(std::vector<int> arr)
 
 	bigs = mergeInsertSortVector(bigs);
 
-	//réordonner pairs selon bigs triés
 	std::vector<Pair> sortedPairs;
 	std::vector<bool> used(pairs.size(), false);
 	for (size_t i = 0; i < bigs.size(); i++)
@@ -196,15 +195,12 @@ std::vector<int> mergeInsertSortVector(std::vector<int> arr)
 
 	std::vector<int> result = bigs;
 
-	//smalls dans l'ordre associé aux bigs triés
 	std::vector<int> smalls;
 	for (size_t i = 0; i < sortedPairs.size(); i++)
 		smalls.push_back(sortedPairs[i].small);
 
-	//smalls[0 <= bigs[0]
 	result.insert(result.begin(), smalls[0]);
 
-	//inserer smalls avec jacob et borne du big associe
 	std::vector<size_t> jacob = buildJacobVector(smalls.size());
 	for (size_t i = 0; i < jacob.size(); i++)
 	{
@@ -266,6 +262,7 @@ std::deque<size_t> buildJacobDeque(size_t size)
 		size_t next = jacob[jacob.size() - 1] + 2 * jacob[jacob.size() - 2];
 		jacob.push_back(next);
 	}
+
 	std::deque<bool> used(size, false);
 
 	for (size_t i = 1; i < jacob.size(); i++)
@@ -295,7 +292,6 @@ std::deque<size_t> buildJacobDeque(size_t size)
 	}
 	return (order);
 }
-
 
 std::deque<int> mergeInsertSortDeque(std::deque<int> arr)
 {

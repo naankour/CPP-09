@@ -6,7 +6,7 @@
 /*   By: naankour <naankour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/27 10:25:42 by naankour          #+#    #+#             */
-/*   Updated: 2026/03/04 14:27:21 by naankour         ###   ########.fr       */
+/*   Updated: 2026/04/20 16:58:17 by naankour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ class RPN
 	
 	public:
 		bool checkFormat(std:: string& token);
-		bool isOperator(std::string& token);
-		bool isOperand(std::string& token);
+		bool isOperator(char token);
+		bool isOperand(char token);
 		int evaluateExpression(int num1, int num2, char op);
 		int RPNalgo(std::string& token);
 };
